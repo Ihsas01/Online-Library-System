@@ -90,7 +90,7 @@
 
 **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/online-library-system.git
+   git clone https://github.com/Ihsas01/Online-Library-System.git
    cd online-library-system
    ```
 
@@ -298,7 +298,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 - **Email**: mohamedihsas001@gmail.com
 - **Issues**: [GitHub Issues](https://github.com/Ihsas01/online-library-system/issues)
-- **Documentation**: [Wiki](https://github.com/Ihsas01/Online-Library-System/wiki)
 
 ---
 
