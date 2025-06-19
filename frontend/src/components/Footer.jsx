@@ -56,17 +56,17 @@ const navigation = {
 const contactInfo = [
   {
     name: 'Email',
-    value: 'contact@onlinelibrary.com',
+    value: 'mohamedihsas001@gmail.com',
     icon: EnvelopeIcon,
   },
   {
     name: 'Phone',
-    value: '+1 (555) 123-4567',
+    value: '+94 76 391 3526',
     icon: PhoneIcon,
   },
   {
     name: 'Address',
-    value: '123 Library Street, Booktown, BT 12345',
+    value: 'Colombo, Sri Lanka',
     icon: MapPinIcon,
   },
 ];
@@ -154,8 +154,8 @@ export default function Footer() {
                 className="flex items-center space-x-2"
               >
                 <EnvelopeIcon className="h-5 w-5 text-[#4300FF]" />
-                <a href="mailto:contact@onlinelibrary.com" className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-200">
-                  contact@onlinelibrary.com
+                <a href="mailto:mohamedihsas001@gmail.com" className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-200">
+                  mohamedihsas001@gmail.com
                 </a>
               </motion.li>
               <motion.li
@@ -164,8 +164,8 @@ export default function Footer() {
                 className="flex items-center space-x-2"
               >
                 <PhoneIcon className="h-5 w-5 text-[#4300FF]" />
-                <a href="tel:+1234567890" className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-200">
-                  +1 (234) 567-890
+                <a href="tel:+94763913526" className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-200">
+                  +94 76 391 3526
                 </a>
               </motion.li>
               <motion.li
@@ -175,7 +175,7 @@ export default function Footer() {
               >
                 <MapPinIcon className="h-5 w-5 text-[#4300FF]" />
                 <span className="text-sm leading-6 text-gray-600">
-                  123 Library Street, Booktown, BT 12345
+                  Colombo, Sri Lanka
                 </span>
               </motion.li>
             </ul>

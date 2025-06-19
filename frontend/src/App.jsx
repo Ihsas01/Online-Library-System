@@ -19,6 +19,14 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 
+// React Router future flags to suppress warnings
+const router = {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  },
+};
+
 function PrivateRoute({ children, adminOnly = false }) {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
@@ -36,7 +44,7 @@ function PrivateRoute({ children, adminOnly = false }) {
 function App() {
   return (
     <Provider store={store}>
-      <Router>
+      <Router {...router}>
         <div className="min-h-screen flex flex-col">
           <Navbar />
           <main className="flex-grow container mx-auto px-4 py-8">

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const AnimatedCounter = ({ 
-  end, 
+  end = 0, 
   duration = 2, 
   delay = 0, 
   className = "",
@@ -15,7 +15,7 @@ const AnimatedCounter = ({
   const isInView = useInView(ref, { once: true, threshold: 0.5 });
 
   useEffect(() => {
-    if (isInView) {
+    if (isInView && typeof end === 'number' && !isNaN(end)) {
       const startTime = Date.now();
       const startValue = 0;
       
