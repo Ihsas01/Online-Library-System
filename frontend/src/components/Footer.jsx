@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import {
   BookOpenIcon,
   EnvelopeIcon,
   PhoneIcon,
   MapPinIcon,
+  ArrowUpIcon,
+  CheckIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 
 const navigation = {
@@ -50,6 +54,19 @@ const navigation = {
         </svg>
       ),
     },
+    {
+      name: 'LinkedIn',
+      href: '#',
+      icon: (props) => (
+        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+          <path
+            fillRule="evenodd"
+            d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+            clipRule="evenodd"
+          />
+        </svg>
+      ),
+    },
   ],
 };
 
@@ -58,81 +75,176 @@ const contactInfo = [
     name: 'Email',
     value: 'mohamedihsas001@gmail.com',
     icon: EnvelopeIcon,
+    href: 'mailto:mohamedihsas001@gmail.com',
   },
   {
     name: 'Phone',
     value: '+94 76 391 3526',
     icon: PhoneIcon,
+    href: 'tel:+94763913526',
   },
   {
     name: 'Address',
     value: 'Colombo, Sri Lanka',
     icon: MapPinIcon,
+    href: '#',
   },
 ];
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Handle scroll to top
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Show/hide scroll to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    if (email) {
+      setIsSubscribed(true);
+      setEmail('');
+      setTimeout(() => setIsSubscribed(false), 3000);
+    }
+  };
+
   return (
-    <footer className="bg-white border-t border-gray-200">
-      <div className="mx-auto max-w-7xl overflow-hidden px-6 py-12 sm:py-16 lg:px-8">
-        <nav className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
-          {navigation.main.map((item) => (
+    <footer className="relative bg-gradient-to-br from-gray-50 via-white to-gray-50 border-t border-gray-200/50">
+      {/* Scroll to top button */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 z-50 p-3 bg-gradient-to-r from-[#4300FF] to-[#00CAFF] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ArrowUpIcon className="h-5 w-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      <div className="mx-auto max-w-7xl overflow-hidden px-6 py-16 sm:py-20 lg:px-8">
+        {/* Top Navigation */}
+        <motion.nav
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
+          aria-label="Footer"
+        >
+          {navigation.main.map((item, index) => (
             <motion.div
               key={item.name}
-              whileHover={{ scale: 1.05 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
               <Link
                 to={item.href}
-                className="pb-6 text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-200"
+                className="pb-6 text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-all duration-300 font-medium"
               >
                 {item.name}
               </Link>
             </motion.div>
           ))}
-        </nav>
+        </motion.nav>
 
-        <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Main Content Grid */}
+        <div className="mt-12 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Brand Section */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="space-y-6"
           >
             <Link to="/" className="flex items-center group">
               <motion.div
-                whileHover={{ rotate: 15 }}
-                transition={{ duration: 0.2 }}
+                whileHover={{ rotate: 15, scale: 1.1 }}
+                transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+                className="relative"
               >
-                <BookOpenIcon className="h-8 w-8 text-[#4300FF]" />
+                <BookOpenIcon className="h-10 w-10 text-[#4300FF] drop-shadow-lg" />
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-[#4300FF] to-[#00CAFF] rounded-full opacity-0 group-hover:opacity-20 blur-xl"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
               </motion.div>
-              <span className="ml-2 text-xl font-bold bg-gradient-to-r from-[#4300FF] to-[#00CAFF] bg-clip-text text-transparent group-hover:from-[#00CAFF] group-hover:to-[#4300FF] transition-all duration-300">
+              <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-[#4300FF] via-[#00CAFF] to-[#4300FF] bg-clip-text text-transparent group-hover:from-[#00CAFF] group-hover:to-[#4300FF] transition-all duration-500">
                 Online Library
               </span>
             </Link>
-            <p className="text-sm leading-6 text-gray-600">
-              Your gateway to a world of knowledge. Discover, read, and learn with our extensive collection of digital books.
+            <p className="text-sm leading-6 text-gray-600 max-w-xs">
+              Your gateway to a world of knowledge. Discover, read, and learn with our extensive collection of digital books and resources.
             </p>
+            <div className="flex space-x-4">
+              {navigation.social.map((item, index) => (
+                <motion.a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-400 hover:text-[#4300FF] transition-all duration-300 p-2 rounded-lg hover:bg-gray-100"
+                  whileHover={{ scale: 1.2, rotate: 5, y: -2 }}
+                  whileTap={{ scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <span className="sr-only">{item.name}</span>
+                  <item.icon className="h-5 w-5" aria-hidden="true" />
+                </motion.a>
+              ))}
+            </div>
           </motion.div>
 
+          {/* Quick Links */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="space-y-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="space-y-6"
           >
-            <h3 className="text-sm font-semibold leading-6 text-gray-900">Quick Links</h3>
-            <ul className="space-y-3">
-              {navigation.main.map((item) => (
+            <h3 className="text-lg font-semibold leading-6 text-gray-900 bg-gradient-to-r from-[#4300FF] to-[#00CAFF] bg-clip-text text-transparent">
+              Quick Links
+            </h3>
+            <ul className="space-y-4">
+              {navigation.main.map((item, index) => (
                 <motion.li
                   key={item.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  viewport={{ once: true }}
                   whileHover={{ x: 5 }}
-                  transition={{ duration: 0.2 }}
+                  className="flex items-center group"
                 >
                   <Link
                     to={item.href}
-                    className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-200"
+                    className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-all duration-300 font-medium flex items-center group"
                   >
+                    <span className="w-1 h-1 bg-[#4300FF] rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-all duration-300" />
                     {item.name}
                   </Link>
                 </motion.li>
@@ -140,107 +252,147 @@ export default function Footer() {
             </ul>
           </motion.div>
 
+          {/* Contact Information */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="space-y-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="space-y-6"
           >
-            <h3 className="text-sm font-semibold leading-6 text-gray-900">Contact Us</h3>
-            <ul className="space-y-3">
-              <motion.li
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center space-x-2"
-              >
-                <EnvelopeIcon className="h-5 w-5 text-[#4300FF]" />
-                <a href="mailto:mohamedihsas001@gmail.com" className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-200">
-                  mohamedihsas001@gmail.com
-                </a>
-              </motion.li>
-              <motion.li
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center space-x-2"
-              >
-                <PhoneIcon className="h-5 w-5 text-[#4300FF]" />
-                <a href="tel:+94763913526" className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-200">
-                  +94 76 391 3526
-                </a>
-              </motion.li>
-              <motion.li
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center space-x-2"
-              >
-                <MapPinIcon className="h-5 w-5 text-[#4300FF]" />
-                <span className="text-sm leading-6 text-gray-600">
-                  Colombo, Sri Lanka
-                </span>
-              </motion.li>
+            <h3 className="text-lg font-semibold leading-6 text-gray-900 bg-gradient-to-r from-[#4300FF] to-[#00CAFF] bg-clip-text text-transparent">
+              Contact Us
+            </h3>
+            <ul className="space-y-4">
+              {contactInfo.map((info, index) => (
+                <motion.li
+                  key={info.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ x: 5 }}
+                  className="flex items-start space-x-3 group"
+                >
+                  <div className="flex-shrink-0 p-1.5 bg-gradient-to-r from-[#4300FF]/10 to-[#00CAFF]/10 rounded-lg group-hover:from-[#4300FF]/20 group-hover:to-[#00CAFF]/20 transition-all duration-300">
+                    <info.icon className="h-4 w-4 text-[#4300FF]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900">{info.name}</p>
+                    {info.href && info.href !== '#' ? (
+                      <a
+                        href={info.href}
+                        className="text-sm leading-6 text-gray-600 hover:text-[#4300FF] transition-colors duration-300 break-all"
+                      >
+                        {info.value}
+                      </a>
+                    ) : (
+                      <p className="text-sm leading-6 text-gray-600">{info.value}</p>
+                    )}
+                  </div>
+                </motion.li>
+              ))}
             </ul>
           </motion.div>
 
+          {/* Newsletter */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="space-y-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="space-y-6"
           >
-            <h3 className="text-sm font-semibold leading-6 text-gray-900">Newsletter</h3>
+            <h3 className="text-lg font-semibold leading-6 text-gray-900 bg-gradient-to-r from-[#4300FF] to-[#00CAFF] bg-clip-text text-transparent">
+              Newsletter
+            </h3>
             <p className="text-sm leading-6 text-gray-600">
-              Subscribe to our newsletter for the latest updates and book recommendations.
+              Subscribe to our newsletter for the latest updates, book recommendations, and exclusive content.
             </p>
-            <form className="mt-4">
-              <div className="flex gap-x-4">
-                <label htmlFor="email-address" className="sr-only">
-                  Email address
-                </label>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="min-w-0 flex-auto rounded-lg border-0 bg-gray-50 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[#4300FF] sm:text-sm sm:leading-6"
-                  placeholder="Enter your email"
-                />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  type="submit"
-                  className="flex-none rounded-lg bg-[#4300FF] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#00CAFF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4300FF] transition-all duration-200"
+            
+            <AnimatePresence>
+              {isSubscribed ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex items-center p-3 bg-green-50 border border-green-200 rounded-lg"
                 >
-                  Subscribe
-                </motion.button>
-              </div>
-            </form>
+                  <CheckIcon className="h-5 w-5 text-green-600 mr-2" />
+                  <span className="text-sm text-green-800">Successfully subscribed!</span>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+                  <div className="relative">
+                    <input
+                      id="email-address"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4300FF] focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                      placeholder="Enter your email"
+                    />
+                    <EnvelopeIcon className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    className="w-full px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#4300FF] to-[#00CAFF] hover:from-[#00CAFF] hover:to-[#4300FF] rounded-lg transition-all duration-300 hover:shadow-lg"
+                  >
+                    Subscribe
+                  </motion.button>
+                </form>
+              )}
+            </AnimatePresence>
+            
+            <p className="text-xs text-gray-500">
+              We respect your privacy. Unsubscribe at any time.
+            </p>
           </motion.div>
         </div>
 
-        <div className="mt-10 flex justify-center space-x-10">
-          {navigation.social.map((item) => (
-            <motion.a
-              key={item.name}
-              href={item.href}
-              className="text-gray-400 hover:text-[#4300FF] transition-colors duration-200"
-              whileHover={{ scale: 1.2, rotate: 5 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <span className="sr-only">{item.name}</span>
-              <item.icon className="h-6 w-6" aria-hidden="true" />
-            </motion.a>
-          ))}
-        </div>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-10 text-center text-xs leading-5 text-gray-500"
+        {/* Bottom Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="mt-16 pt-8 border-t border-gray-200/50"
         >
-          &copy; {new Date().getFullYear()} Online Library. All rights reserved.
-        </motion.p>
+          <div className="flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0">
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="text-sm text-gray-500 text-center"
+            >
+              &copy; {new Date().getFullYear()} Online Library. All rights reserved.
+            </motion.p>
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              viewport={{ once: true }}
+              className="flex space-x-6 text-sm text-gray-500"
+            >
+              <Link to="/privacy" className="hover:text-[#4300FF] transition-colors duration-200">
+                Privacy Policy
+              </Link>
+              <Link to="/terms" className="hover:text-[#4300FF] transition-colors duration-200">
+                Terms of Service
+              </Link>
+              <Link to="/cookies" className="hover:text-[#4300FF] transition-colors duration-200">
+                Cookie Policy
+              </Link>
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
     </footer>
   );
