@@ -88,47 +88,27 @@
 
 ### Installation
 
-1. **Clone the repository**
+**Clone the repository**
    ```bash
    git clone https://github.com/yourusername/online-library-system.git
    cd online-library-system
    ```
 
-2. **Install Backend Dependencies**
+ **Install Backend Dependencies**
    ```bash
    cd backend
    npm install
    ```
 
-3. **Install Frontend Dependencies**
+**Install Frontend Dependencies**
    ```bash
    cd ../frontend
    npm install
    ```
 
-4. **Environment Setup**
 
-   Create `.env` file in the `backend` directory:
-   ```env
-   # Server Configuration
-   PORT=5000
-   NODE_ENV=development
-   
-   # Database Configuration
-   MONGODB_URI=mongodb://localhost:27017/library_management
-   
-   # JWT Configuration
-   JWT_SECRET=your_super_secret_jwt_key_here
-   JWT_EXPIRE=7d
-   
-   # Optional: Email Configuration (for notifications)
-   EMAIL_HOST=smtp.gmail.com
-   EMAIL_PORT=587
-   EMAIL_USER=your-email@gmail.com
-   EMAIL_PASS=your-app-password
-   ```
 
-5. **Start Development Servers**
+ **Start Development Servers**
 
    **Backend Server:**
    ```bash
@@ -144,7 +124,7 @@
    ```
    App will start at: `http://localhost:5173`
 
-6. **Seed Database (Optional)**
+ **Seed Database (Optional)**
    ```bash
    cd backend
    npm run seed
