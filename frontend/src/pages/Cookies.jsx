@@ -16,6 +16,7 @@ import {
   EnvelopeIcon,
   MapPinIcon,
   CircleStackIcon,
+  DocumentTextIcon,
   XMarkIcon,
   CheckIcon,
 } from '@heroicons/react/24/outline';
