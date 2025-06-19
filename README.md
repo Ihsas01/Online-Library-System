@@ -9,9 +9,6 @@
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4+-06B6D4?style=for-the-badge&logo=tailwindcss)
 ![Vite](https://img.shields.io/badge/Vite-5.1+-646CFF?style=for-the-badge&logo=vite)
 
-**A modern, full-featured online library management system built with React, Node.js, and MongoDB**
-
-[🚀 Live Demo](#) • [📖 Documentation](#) • [🐛 Report Bug](#) • [💡 Request Feature](#)
 
 </div>
 
