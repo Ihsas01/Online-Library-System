@@ -228,27 +228,6 @@ npm run lint     # Run ESLint
 - `POST /api/books/:id/return` - Return a book
 - `GET /api/users/:id/borrowed` - Get user's borrowed books
 
----
-
-## 🎨 Screenshots
-
-<div align="center">
-
-### 🏠 Homepage
-![Homepage](https://via.placeholder.com/800x400/4F46E5/FFFFFF?text=Homepage+Screenshot)
-
-### 📚 Book Catalog
-![Book Catalog](https://via.placeholder.com/800x400/10B981/FFFFFF?text=Book+Catalog+Screenshot)
-
-### 👤 User Dashboard
-![Dashboard](https://via.placeholder.com/800x400/F59E0B/FFFFFF?text=User+Dashboard+Screenshot)
-
-### 🔐 Authentication
-![Login](https://via.placeholder.com/800x400/EF4444/FFFFFF?text=Login+Page+Screenshot)
-
-</div>
-
----
 
 ## 🚀 Deployment
 
@@ -317,17 +296,17 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📞 Support
 
-- **Email**: support@librarysystem.com
-- **Issues**: [GitHub Issues](https://github.com/yourusername/online-library-system/issues)
-- **Documentation**: [Wiki](https://github.com/yourusername/online-library-system/wiki)
+- **Email**: mohamedihsas001@gmail.com
+- **Issues**: [GitHub Issues](https://github.com/Ihsas01/online-library-system/issues)
+- **Documentation**: [Wiki](https://github.com/Ihsas01/Online-Library-System/wiki)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by [Your Name]**
+**Made with ❤️ by Ihsas Ifthikar**
 
-[⬆ Back to Top](#-online-library-management-system)
+
 
 </div>
 
