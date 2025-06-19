@@ -181,7 +181,10 @@ const bookSlice = createSlice({
           state.currentBook.reviews.push(action.payload);
           // Update average rating
           const totalRating = state.currentBook.reviews.reduce((sum, review) => sum + review.rating, 0);
-          state.currentBook.rating = totalRating / state.currentBook.reviews.length;
+          state.currentBook.rating = {
+            average: totalRating / state.currentBook.reviews.length,
+            count: state.currentBook.reviews.length
+          };
         }
       })
       .addCase(addReview.rejected, (state, action) => {
@@ -196,13 +199,13 @@ const bookSlice = createSlice({
       .addCase(borrowBook.fulfilled, (state, action) => {
         state.loading = false;
         if (state.currentBook) {
-          state.currentBook.available = false;
+          state.currentBook.availableCopies = Math.max(0, state.currentBook.availableCopies - 1);
           state.currentBook.borrowedBy = action.payload.userId;
           state.currentBook.dueDate = action.payload.dueDate;
         }
         const bookIndex = state.books.findIndex(book => book._id === action.payload.bookId);
         if (bookIndex !== -1) {
-          state.books[bookIndex].available = false;
+          state.books[bookIndex].availableCopies = Math.max(0, state.books[bookIndex].availableCopies - 1);
         }
       })
       .addCase(borrowBook.rejected, (state, action) => {
@@ -217,13 +220,13 @@ const bookSlice = createSlice({
       .addCase(returnBook.fulfilled, (state, action) => {
         state.loading = false;
         if (state.currentBook) {
-          state.currentBook.available = true;
+          state.currentBook.availableCopies = Math.min(state.currentBook.totalCopies, state.currentBook.availableCopies + 1);
           state.currentBook.borrowedBy = null;
           state.currentBook.dueDate = null;
         }
         const bookIndex = state.books.findIndex(book => book._id === action.payload.bookId);
         if (bookIndex !== -1) {
-          state.books[bookIndex].available = true;
+          state.books[bookIndex].availableCopies = Math.min(state.books[bookIndex].totalCopies, state.books[bookIndex].availableCopies + 1);
         }
       })
       .addCase(returnBook.rejected, (state, action) => {

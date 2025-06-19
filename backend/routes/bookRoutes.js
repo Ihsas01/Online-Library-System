@@ -7,7 +7,8 @@ const {
   createBook,
   updateBook,
   deleteBook,
-  addReview
+  addReview,
+  seedBooks
 } = require('../controllers/bookController');
 
 const router = express.Router();
@@ -56,6 +57,9 @@ const reviewValidation = [
 // Public routes
 router.get('/', getBooks);
 router.get('/:id', getBook);
+
+// Seed route (for development/testing)
+router.post('/seed', seedBooks);
 
 // Protected routes
 router.post('/:id/reviews', auth, reviewValidation, addReview);
