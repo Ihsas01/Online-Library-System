@@ -27,6 +27,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Particles from 'react-tsparticles';
 import { loadSlim } from "tsparticles-slim";
+import AnimatedCounter from '../components/AnimatedCounter';
 
 // Enhanced featured books data with more details
 const featuredBooks = [
@@ -270,6 +271,10 @@ export default function Home() {
     }
   };
 
+  // --- NEW: Scroll progress bar ---
+  const { scrollYProgress: pageScrollY } = useScroll();
+  const progressBarWidth = useTransform(pageScrollY, [0, 1], ['0%', '100%']);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#4300FF]/5 to-[#00FFDE]/5">
@@ -300,8 +305,37 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#4300FF]/5 to-[#00FFDE]/5 overflow-x-hidden">
-      {/* Enhanced Hero Section with Parallax */}
+      {/* --- NEW: Scroll Progress Bar --- */}
+      <motion.div
+        style={{ width: progressBarWidth }}
+        className="fixed top-0 left-0 h-1.5 bg-gradient-to-r from-[#00FFDE] via-[#4300FF] to-[#00CAFF] z-50 shadow-lg"
+      />
+      {/* Enhanced Hero Section with Parallax, Glassmorphism, and Animated SVGs */}
       <div ref={heroRef} className="relative overflow-hidden min-h-screen flex items-center">
+        {/* --- NEW: Animated SVG Blobs --- */}
+        <motion.svg
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 0.25, scale: 1 }}
+          transition={{ duration: 1.2, delay: 0.2 }}
+          className="absolute -top-32 -left-32 w-[600px] h-[600px] z-0"
+          viewBox="0 0 600 600"
+          fill="none"
+        >
+          <motion.path
+            d="M300,60C390,80,540,180,500,300C460,420,320,540,200,500C80,460,60,390,100,270C140,150,210,40,300,60Z"
+            fill="url(#blobGradient)"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2, delay: 0.5 }}
+          />
+          <defs>
+            <linearGradient id="blobGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#00FFDE" />
+              <stop offset="100%" stopColor="#4300FF" />
+            </linearGradient>
+          </defs>
+        </motion.svg>
+        {/* --- NEW: Glassmorphism Card Overlay for Hero --- */}
         <Particles
           id="tsparticles"
           init={particlesInit}
@@ -345,12 +379,12 @@ export default function Home() {
           className="absolute inset-0 bg-gradient-to-br from-[#4300FF] via-[#0065F8] to-[#00CAFF] opacity-90" 
         />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay" />
-        
+        {/* --- NEW: Glassy Card --- */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 relative z-10"
+          className="max-w-3xl mx-auto px-6 py-20 sm:py-32 relative z-10 rounded-3xl bg-white/10 backdrop-blur-2xl shadow-2xl border border-white/20"
         >
           <div className="text-center">
             <motion.div
@@ -359,35 +393,32 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="mb-6"
             >
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white text-sm font-medium mb-4">
-                <SparklesIcon className="w-4 h-4 mr-2" />
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-gray-900 text-sm font-medium mb-4 shadow-lg">
+                <SparklesIcon className="w-4 h-4 mr-2 animate-pulse text-[#00CAFF]" />
                 Discover Your Next Favorite Book
               </div>
             </motion.div>
-
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl lg:text-7xl leading-tight"
+              className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl lg:text-7xl leading-tight drop-shadow-xl"
             >
-              <span className="block bg-gradient-to-r from-[#00FFDE] to-[#00CAFF] bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-[#00FFDE] to-[#00CAFF] bg-clip-text text-transparent animate-gradient-x">
                 Welcome to Our
               </span>
               <span className="block mt-2">Digital Library</span>
             </motion.h1>
-            
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-white/90 leading-relaxed"
+              className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-gray-700 leading-relaxed"
             >
               Discover thousands of books, connect with readers, and explore new worlds through literature. 
               Your journey into knowledge starts here.
             </motion.p>
-            
-            {/* Enhanced Search Bar */}
+            {/* Enhanced Search Bar with Glow and Micro-interactions */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -401,18 +432,17 @@ export default function Home() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search for books, authors, or genres..."
-                  className="w-full px-6 py-4 rounded-full bg-white/10 backdrop-blur-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-[#00FFDE] transition-all duration-300 group-hover:bg-white/20 text-lg"
+                  className="w-full px-6 py-4 rounded-full bg-white/20 backdrop-blur-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-[#00FFDE]/60 focus:ring-offset-2 focus:ring-offset-[#4300FF]/10 transition-all duration-300 group-hover:bg-white/30 text-lg shadow-xl border border-white/20"
                   onFocus={() => setIsSearchVisible(true)}
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#00FFDE] text-[#4300FF] hover:bg-white transition-colors duration-300"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#00FFDE] text-[#4300FF] hover:bg-white hover:text-[#00FFDE] shadow-lg transition-colors duration-300 animate-bounce"
                 >
                   <MagnifyingGlassIcon className="h-5 w-5" />
                 </button>
               </form>
             </motion.div>
-
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -435,7 +465,7 @@ export default function Home() {
                 <>
                   <Link
                     to="/register"
-                    className="group relative inline-flex items-center px-8 py-4 overflow-hidden rounded-full bg-white text-[#4300FF] hover:bg-[#00FFDE] hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    className="group relative inline-flex items-center px-8 py-4 overflow-hidden rounded-full bg-white text-[#4300FF] hover:bg-[#00FFDE] hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-gray-200"
                   >
                     <span className="absolute right-0 flex items-center justify-start w-10 h-10 duration-300 transform translate-x-full group-hover:translate-x-0">
                       <ArrowRightIcon className="w-5 h-5" />
@@ -446,7 +476,7 @@ export default function Home() {
                   </Link>
                   <Link
                     to="/login"
-                    className="group relative inline-flex items-center px-8 py-4 overflow-hidden rounded-full bg-transparent text-white border-2 border-white hover:bg-white hover:text-[#4300FF] transition-all duration-300 transform hover:scale-105"
+                    className="group relative inline-flex items-center px-8 py-4 overflow-hidden rounded-full bg-transparent text-gray-900 border-2 border-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300 transform hover:scale-105"
                   >
                     <span className="relative text-sm font-medium">
                       Sign In
@@ -464,16 +494,16 @@ export default function Home() {
               className="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto"
             >
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">10K+</div>
-                <div className="text-white/70 text-sm">Books</div>
+                <div className="text-2xl font-bold text-gray-900">10K+</div>
+                <div className="text-gray-500 text-sm">Books</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">50K+</div>
-                <div className="text-white/70 text-sm">Readers</div>
+                <div className="text-2xl font-bold text-gray-900">50K+</div>
+                <div className="text-gray-500 text-sm">Readers</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">24/7</div>
-                <div className="text-white/70 text-sm">Access</div>
+                <div className="text-2xl font-bold text-gray-900">24/7</div>
+                <div className="text-gray-500 text-sm">Access</div>
               </div>
             </motion.div>
           </div>
@@ -993,7 +1023,7 @@ export default function Home() {
                   </Link>
                   <Link
                     to="/login"
-                    className="group relative inline-flex items-center px-8 py-4 overflow-hidden rounded-full bg-transparent text-white border-2 border-white hover:bg-white hover:text-[#4300FF] transition-all duration-300 transform hover:scale-105"
+                    className="group relative inline-flex items-center px-8 py-4 overflow-hidden rounded-full bg-transparent text-gray-900 border-2 border-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300 transform hover:scale-105"
                   >
                     <span className="relative text-sm font-medium">
                       Sign In
