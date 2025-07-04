@@ -16,6 +16,8 @@ import {
   ExclamationTriangleIcon,
   SparklesIcon,
   BookOpenIcon,
+  HomeIcon,
+  StarIcon as StarOutlineIcon,
 } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/20/solid';
 
@@ -26,6 +28,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState({ email: false, password: false });
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -53,7 +57,7 @@ export default function Login() {
   }, [watchedPassword]);
 
   const onSubmit = async (data) => {
-    const result = await dispatch(login(data));
+    const result = await dispatch(login({ ...data, rememberMe }));
     if (!result.error) {
       navigate('/');
     }
@@ -78,68 +82,131 @@ export default function Login() {
     { name: 'Apple', color: 'from-gray-800 to-gray-900', icon: '🍎' },
   ];
 
+  // Testimonials/Benefits
+  const benefits = [
+    {
+      icon: <StarIcon className="h-6 w-6 text-yellow-400" />,
+      title: 'Access 10,000+ Books',
+      desc: 'Explore a vast digital library with new titles every week.'
+    },
+    {
+      icon: <SparklesIcon className="h-6 w-6 text-[#4300FF]" />,
+      title: 'Personalized Recommendations',
+      desc: 'Get book suggestions tailored to your interests.'
+    },
+    {
+      icon: <BookOpenIcon className="h-6 w-6 text-[#00CAFF]" />,
+      title: 'Track Your Reading',
+      desc: 'Save favorites, track progress, and set reading goals.'
+    },
+  ];
+
+  const testimonials = [
+    {
+      quote: '“The Online Library changed the way I read. The interface is beautiful and easy to use!”',
+      name: 'Ava R.',
+    },
+    {
+      quote: '“I love the recommendations and the huge selection of books!”',
+      name: 'James K.',
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#4300FF]/10 via-[#00FFDE]/5 to-[#FF6B6B]/10 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#4300FF]/10 via-[#00FFDE]/5 to-[#FF6B6B]/10 relative overflow-hidden flex flex-col lg:flex-row">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-[#4300FF]/20 to-[#00FFDE]/20 rounded-full blur-3xl"
         />
         <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
           className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-[#00FFDE]/20 to-[#FF6B6B]/20 rounded-full blur-3xl"
         />
-      </div>
-
-      {/* Floating Icons */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {/* Extra floating shapes */}
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
-            animate={{
-              y: [0, -20, 0],
-              x: [0, 10, 0],
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5,
-            }}
-            className="absolute text-2xl opacity-20"
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${10 + i * 10}%`,
-            }}
+            animate={{ y: [0, -20, 0], x: [0, 10, 0], rotate: [0, 360] }}
+            transition={{ duration: 10 + i * 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.7 }}
+            className="absolute text-2xl opacity-10"
+            style={{ left: `${10 + i * 20}%`, top: `${20 + i * 15}%` }}
           >
-            <BookOpenIcon className="w-8 h-8 text-[#4300FF]" />
+            <BookOpenIcon className="w-10 h-10 text-[#4300FF]" />
           </motion.div>
         ))}
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
+      {/* Left Panel (Desktop/Tablet) */}
+      <motion.div
+        initial={{ opacity: 0, x: -40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="hidden lg:flex flex-col justify-center items-start w-1/2 px-12 py-16 relative z-10"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-10"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <BookOpenIcon className="h-12 w-12 text-[#4300FF] drop-shadow-lg" />
+            <span className="text-3xl font-bold bg-gradient-to-r from-[#4300FF] via-[#00CAFF] to-[#4300FF] bg-clip-text text-transparent">Online Library</span>
+          </div>
+          <h2 className="text-4xl font-extrabold text-gray-900 mb-4">Welcome to Your Next Chapter</h2>
+          <p className="text-lg text-gray-600 max-w-md mb-6">Sign in to unlock a world of books, personalized recommendations, and a vibrant reading community.</p>
+        </motion.div>
+        <div className="grid grid-cols-1 gap-6 mb-10">
+          {benefits.map((b, i) => (
+            <motion.div
+              key={b.title}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
+              className="flex items-center gap-4 bg-white/70 backdrop-blur-md rounded-xl p-4 shadow hover:shadow-lg transition-all duration-200"
+            >
+              <div>{b.icon}</div>
+              <div>
+                <div className="font-semibold text-gray-800">{b.title}</div>
+                <div className="text-sm text-gray-500">{b.desc}</div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        {/* Testimonials */}
+        <div className="space-y-4">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={t.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
+              className="bg-gradient-to-r from-[#4300FF]/10 to-[#00CAFF]/10 rounded-xl p-4 shadow"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <StarIcon className="h-5 w-5 text-yellow-400" />
+                <span className="text-sm text-gray-700 font-medium">{t.name}</span>
+              </div>
+              <div className="text-gray-600 italic text-sm">{t.quote}</div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Main Login Card */}
+      <div className="relative z-10 min-h-screen flex flex-1 items-center justify-center px-4 py-12">
+        {/* Back to Home */}
+        <Link to="/" className="absolute top-6 left-6 flex items-center gap-2 text-gray-500 hover:text-[#4300FF] transition-colors duration-200 text-sm font-medium">
+          <HomeIcon className="h-5 w-5" /> Home
+        </Link>
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
           className="w-full max-w-md"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
@@ -153,7 +220,7 @@ export default function Login() {
             <div className="absolute top-4 right-4">
               <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
                 className="w-8 h-8 bg-gradient-to-r from-[#4300FF] to-[#00FFDE] rounded-full flex items-center justify-center"
               >
                 <SparklesIcon className="w-4 h-4 text-white" />
@@ -172,7 +239,6 @@ export default function Login() {
                   <UserIcon className="w-8 h-8 text-white" />
                 </div>
               </motion.div>
-              
               <motion.h2
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -181,7 +247,6 @@ export default function Login() {
               >
                 Welcome Back
               </motion.h2>
-              
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -215,7 +280,6 @@ export default function Login() {
                   </motion.button>
                 ))}
               </div>
-              
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300" />
@@ -363,6 +427,8 @@ export default function Login() {
                     type="button"
                     className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
                     onClick={() => setShowPassword(!showPassword)}
+                    onMouseEnter={() => setShowPasswordTooltip(true)}
+                    onMouseLeave={() => setShowPasswordTooltip(false)}
                   >
                     {showPassword ? (
                       <EyeSlashIcon className="h-5 w-5" />
@@ -370,8 +436,19 @@ export default function Login() {
                       <EyeIcon className="h-5 w-5" />
                     )}
                   </motion.button>
+                  <AnimatePresence>
+                    {showPasswordTooltip && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute right-10 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 shadow-lg z-20"
+                      >
+                        {showPassword ? 'Hide password' : 'Show password'}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                
                 {/* Password Strength Indicator */}
                 {watchedPassword && (
                   <motion.div
@@ -408,7 +485,6 @@ export default function Login() {
                     </p>
                   </motion.div>
                 )}
-                
                 <AnimatePresence>
                   {errors.password && (
                     <motion.p
@@ -422,6 +498,30 @@ export default function Login() {
                     </motion.p>
                   )}
                 </AnimatePresence>
+              </motion.div>
+
+              {/* Remember Me Toggle */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.85 }}
+                className="flex items-center gap-2"
+              >
+                <button
+                  type="button"
+                  aria-pressed={rememberMe}
+                  onClick={() => setRememberMe((v) => !v)}
+                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 focus:outline-none ${
+                    rememberMe ? 'bg-gradient-to-r from-[#4300FF] to-[#00CAFF] border-[#4300FF]' : 'bg-white border-gray-300'
+                  }`}
+                >
+                  <motion.div
+                    initial={false}
+                    animate={{ scale: rememberMe ? 1 : 0 }}
+                    className="w-3 h-3 rounded-full bg-white shadow"
+                  />
+                </button>
+                <span className="text-sm text-gray-700 select-none">Remember me</span>
               </motion.div>
 
               {/* Submit Button */}
@@ -440,7 +540,7 @@ export default function Login() {
                   {loading ? (
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                       className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                     />
                   ) : (
