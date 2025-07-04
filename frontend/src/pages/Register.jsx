@@ -17,6 +17,7 @@ import {
   SparklesIcon,
   BookOpenIcon,
   ShieldCheckIcon,
+  HomeIcon,
 } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/20/solid';
 
@@ -34,6 +35,8 @@ export default function Register() {
   });
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
+  const [showConfirmPasswordTooltip, setShowConfirmPasswordTooltip] = useState(false);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -66,13 +69,11 @@ export default function Register() {
       alert('Please accept the terms and conditions');
       return;
     }
-    
     const result = await dispatch(registerUser({
       name: data.name,
       email: data.email,
       password: data.password
     }));
-    
     if (!result.error) {
       navigate('/');
     }
@@ -105,68 +106,130 @@ export default function Register() {
     { text: 'One special character', met: /[^A-Za-z0-9]/.test(watchedPassword) },
   ];
 
+  // Benefits and testimonials (mirroring Login page for consistency)
+  const benefits = [
+    {
+      icon: <StarIcon className="h-6 w-6 text-yellow-400" />,
+      title: 'Access 10,000+ Books',
+      desc: 'Explore a vast digital library with new titles every week.'
+    },
+    {
+      icon: <SparklesIcon className="h-6 w-6 text-[#4300FF]" />,
+      title: 'Personalized Recommendations',
+      desc: 'Get book suggestions tailored to your interests.'
+    },
+    {
+      icon: <BookOpenIcon className="h-6 w-6 text-[#00CAFF]" />,
+      title: 'Track Your Reading',
+      desc: 'Save favorites, track progress, and set reading goals.'
+    },
+  ];
+  const testimonials = [
+    {
+      quote: '“The registration process was smooth and the design is stunning!”',
+      name: 'Sophia L.',
+    },
+    {
+      quote: '“I love how easy it is to join and start reading right away!”',
+      name: 'Ethan M.',
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#4300FF]/10 via-[#00FFDE]/5 to-[#FF6B6B]/10 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#4300FF]/10 via-[#00FFDE]/5 to-[#FF6B6B]/10 relative overflow-hidden flex flex-col lg:flex-row">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-[#4300FF]/20 to-[#00FFDE]/20 rounded-full blur-3xl"
         />
         <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
           className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-[#00FFDE]/20 to-[#FF6B6B]/20 rounded-full blur-3xl"
         />
-      </div>
-
-      {/* Floating Icons */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {/* Extra floating shapes */}
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
-            animate={{
-              y: [0, -20, 0],
-              x: [0, 10, 0],
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5,
-            }}
-            className="absolute text-2xl opacity-20"
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${10 + i * 10}%`,
-            }}
+            animate={{ y: [0, -20, 0], x: [0, 10, 0], rotate: [0, 360] }}
+            transition={{ duration: 10 + i * 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.7 }}
+            className="absolute text-2xl opacity-10"
+            style={{ left: `${10 + i * 20}%`, top: `${20 + i * 15}%` }}
           >
-            <BookOpenIcon className="w-8 h-8 text-[#4300FF]" />
+            <BookOpenIcon className="w-10 h-10 text-[#4300FF]" />
           </motion.div>
         ))}
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
+      {/* Left Panel (Desktop/Tablet) */}
+      <motion.div
+        initial={{ opacity: 0, x: -40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="hidden lg:flex flex-col justify-center items-start w-1/2 px-12 py-16 relative z-10"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-10"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <BookOpenIcon className="h-12 w-12 text-[#4300FF] drop-shadow-lg" />
+            <span className="text-3xl font-bold bg-gradient-to-r from-[#4300FF] via-[#00CAFF] to-[#4300FF] bg-clip-text text-transparent">Online Library</span>
+          </div>
+          <h2 className="text-4xl font-extrabold text-gray-900 mb-4">Create Your Free Account</h2>
+          <p className="text-lg text-gray-600 max-w-md mb-6">Register to unlock a world of books, personalized recommendations, and a vibrant reading community.</p>
+        </motion.div>
+        <div className="grid grid-cols-1 gap-6 mb-10">
+          {benefits.map((b, i) => (
+            <motion.div
+              key={b.title}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
+              className="flex items-center gap-4 bg-white/70 backdrop-blur-md rounded-xl p-4 shadow hover:shadow-lg transition-all duration-200"
+            >
+              <div>{b.icon}</div>
+              <div>
+                <div className="font-semibold text-gray-800">{b.title}</div>
+                <div className="text-sm text-gray-500">{b.desc}</div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        {/* Testimonials */}
+        <div className="space-y-4">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={t.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
+              className="bg-gradient-to-r from-[#4300FF]/10 to-[#00CAFF]/10 rounded-xl p-4 shadow"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <StarIcon className="h-5 w-5 text-yellow-400" />
+                <span className="text-sm text-gray-700 font-medium">{t.name}</span>
+              </div>
+              <div className="text-gray-600 italic text-sm">{t.quote}</div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Main Register Card */}
+      <div className="relative z-10 min-h-screen flex flex-1 items-center justify-center px-4 py-12">
+        {/* Back to Home */}
+        <Link to="/" className="absolute top-6 left-6 flex items-center gap-2 text-gray-500 hover:text-[#4300FF] transition-colors duration-200 text-sm font-medium">
+          <HomeIcon className="h-5 w-5" /> Home
+        </Link>
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
           className="w-full max-w-md"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
@@ -180,7 +243,7 @@ export default function Register() {
             <div className="absolute top-4 right-4">
               <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
                 className="w-8 h-8 bg-gradient-to-r from-[#4300FF] to-[#00FFDE] rounded-full flex items-center justify-center"
               >
                 <SparklesIcon className="w-4 h-4 text-white" />
@@ -199,7 +262,6 @@ export default function Register() {
                   <ShieldCheckIcon className="w-8 h-8 text-white" />
                 </div>
               </motion.div>
-              
               <motion.h2
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -208,7 +270,6 @@ export default function Register() {
               >
                 Join Our Community
               </motion.h2>
-              
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -242,7 +303,6 @@ export default function Register() {
                   </motion.button>
                 ))}
               </div>
-              
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300" />
@@ -441,6 +501,8 @@ export default function Register() {
                     type="button"
                     className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
                     onClick={() => setShowPassword(!showPassword)}
+                    onMouseEnter={() => setShowPasswordTooltip(true)}
+                    onMouseLeave={() => setShowPasswordTooltip(false)}
                   >
                     {showPassword ? (
                       <EyeSlashIcon className="h-5 w-5" />
@@ -448,8 +510,19 @@ export default function Register() {
                       <EyeIcon className="h-5 w-5" />
                     )}
                   </motion.button>
+                  <AnimatePresence>
+                    {showPasswordTooltip && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute right-10 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 shadow-lg z-20"
+                      >
+                        {showPassword ? 'Hide password' : 'Show password'}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                
                 {/* Password Strength Indicator */}
                 {watchedPassword && (
                   <motion.div
@@ -478,7 +551,6 @@ export default function Register() {
                         ))}
                       </div>
                     </div>
-                    
                     {/* Password Requirements */}
                     <div className="space-y-1">
                       {passwordRequirements.map((req, index) => (
@@ -502,7 +574,6 @@ export default function Register() {
                     </div>
                   </motion.div>
                 )}
-                
                 <AnimatePresence>
                   {errors.password && (
                     <motion.p
@@ -555,6 +626,8 @@ export default function Register() {
                     type="button"
                     className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onMouseEnter={() => setShowConfirmPasswordTooltip(true)}
+                    onMouseLeave={() => setShowConfirmPasswordTooltip(false)}
                   >
                     {showConfirmPassword ? (
                       <EyeSlashIcon className="h-5 w-5" />
@@ -562,8 +635,19 @@ export default function Register() {
                       <EyeIcon className="h-5 w-5" />
                     )}
                   </motion.button>
+                  <AnimatePresence>
+                    {showConfirmPasswordTooltip && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute right-10 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 shadow-lg z-20"
+                      >
+                        {showConfirmPassword ? 'Hide password' : 'Show password'}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                
                 {/* Password Match Indicator */}
                 {watchedConfirmPassword && (
                   <motion.div
@@ -583,7 +667,6 @@ export default function Register() {
                     </div>
                   </motion.div>
                 )}
-                
                 <AnimatePresence>
                   {errors.confirmPassword && (
                     <motion.p
