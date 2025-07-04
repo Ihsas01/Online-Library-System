@@ -120,7 +120,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-sky-400 border-t border-sky-500/30">
+    <footer className="relative bg-white border-t-4 border-double border-gray-300">
       {/* Scroll to top button */}
       <AnimatePresence>
         {showScrollTop && (
